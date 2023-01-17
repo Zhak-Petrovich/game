@@ -42,9 +42,9 @@ public class PlayerServiceImpl implements PlayersService {
 
     @Override
     public ResponseEntity<?> create(Player player) {
-        if (Helper.checkPlayer(player)) {
-            player.setLevel(Helper.calculateLevel(player.getExperience()));
-            player.setUntilNexLevel(Helper.calculateNextLevel(player.getLevel(), player.getExperience()));
+        if (ServiceHelper.checkPlayer(player)) {
+            player.setLevel(ServiceHelper.calculateLevel(player.getExperience()));
+            player.setUntilNexLevel(ServiceHelper.calculateNextLevel(player.getLevel(), player.getExperience()));
             Player newPlayer = repository.save(player);
             return new ResponseEntity<>(newPlayer, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -52,7 +52,7 @@ public class PlayerServiceImpl implements PlayersService {
 
     @Override
     public ResponseEntity<?> edit(String id, Player player) {
-        Long checkedId = Helper.checkAndGetId(id);
+        Long checkedId = ServiceHelper.checkAndGetId(id);
         if (checkedId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!repository.existsById(checkedId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -79,8 +79,8 @@ public class PlayerServiceImpl implements PlayersService {
         if (player.getBanned() != null) editPlayer.setBanned(player.getBanned());
         if (player.getExperience() != null) {
             editPlayer.setExperience(player.getExperience());
-            editPlayer.setLevel(Helper.calculateLevel(player.getExperience()));
-            editPlayer.setUntilNexLevel(Helper.calculateNextLevel(editPlayer.getLevel(), player.getExperience()));
+            editPlayer.setLevel(ServiceHelper.calculateLevel(player.getExperience()));
+            editPlayer.setUntilNexLevel(ServiceHelper.calculateNextLevel(editPlayer.getLevel(), player.getExperience()));
         }
 
         return new ResponseEntity<>(repository.save(editPlayer), HttpStatus.OK);
@@ -89,7 +89,7 @@ public class PlayerServiceImpl implements PlayersService {
 
     @Override
     public ResponseEntity<?> delete(String id) {
-        Long checkedId = Helper.checkAndGetId(id);
+        Long checkedId = ServiceHelper.checkAndGetId(id);
 
         if (checkedId != null) {
             if (!repository.existsById(checkedId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -101,7 +101,7 @@ public class PlayerServiceImpl implements PlayersService {
 
     @Override
     public ResponseEntity<?> get(String id) {
-        Long checkedId = Helper.checkAndGetId(id);
+        Long checkedId = ServiceHelper.checkAndGetId(id);
         if (checkedId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!repository.existsById(checkedId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

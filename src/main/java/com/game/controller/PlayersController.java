@@ -3,7 +3,7 @@ package com.game.controller;
 import com.game.entity.Profession;
 import com.game.entity.Race;
 import com.game.entity.Player;
-import com.game.service.Helper;
+import com.game.service.ServiceHelper;
 import com.game.service.PlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +38,7 @@ public class PlayersController {
                                             @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "3") Integer pageSize) {
 
-        List<Player> result = Helper.findByPagingCriteria(playersService,
+        List<Player> result = ServiceHelper.findByPagingCriteria(playersService,
                 name,
                 title,
                 race,
@@ -70,7 +70,7 @@ public class PlayersController {
                                              @RequestParam(value = "minLevel", required = false) Integer minLevel,
                                              @RequestParam(value = "maxLevel", required = false) Integer maxLevel) {
 
-        Integer result = Helper.countByCriteria(playersService,
+        Integer result = ServiceHelper.countByCriteria(playersService,
                 name,
                 title,
                 race,

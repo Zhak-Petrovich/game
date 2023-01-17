@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Helper {
+public class ServiceHelper {
 
     public static boolean checkPlayer(Player player) {
         if (player.getName() == null
