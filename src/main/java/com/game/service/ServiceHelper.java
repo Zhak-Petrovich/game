@@ -8,12 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,48 +76,45 @@ public class ServiceHelper {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        Page page = playersService.findAll(new Specification<Player>() {
-            @Override
-            public Predicate toPredicate(Root<Player> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
-                if (name != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%" + name + "%")));
-                }
-                if (title != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("title"), "%" + title + "%")));
-                }
-                if (race != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("race"), race)));
-                }
-                if (profession != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("profession"), profession)));
-                }
-                if (after != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), new Date(after))));
-                }
-                if (before != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), new Date(before))));
-                }
-                if (banned != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("banned"), banned)));
-                }
-                if (minExperience != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), minExperience)));
-                }
-                if (maxExperience != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("experience"), maxExperience)));
-                }
-                if (minLevel != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("level"), minLevel)));
-                }
-                if (maxLevel != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("level"), maxLevel)));
-                }
-                if (order != null) {
-                    query.orderBy(criteriaBuilder.asc(root.get(order.getFieldName())));
-                }
-                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        Page<Player> page = playersService.findAll((Specification<Player>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (name != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%" + name + "%")));
             }
+            if (title != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("title"), "%" + title + "%")));
+            }
+            if (race != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("race"), race)));
+            }
+            if (profession != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("profession"), profession)));
+            }
+            if (after != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), new Date(after))));
+            }
+            if (before != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), new Date(before))));
+            }
+            if (banned != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("banned"), banned)));
+            }
+            if (minExperience != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), minExperience)));
+            }
+            if (maxExperience != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("experience"), maxExperience)));
+            }
+            if (minLevel != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("level"), minLevel)));
+            }
+            if (maxLevel != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("level"), maxLevel)));
+            }
+            if (order != null) {
+                query.orderBy(criteriaBuilder.asc(root.get(order.getFieldName())));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
 
         return page.getContent();
@@ -140,47 +132,44 @@ public class ServiceHelper {
                                           Integer maxExperience,
                                           Integer minLevel,
                                           Integer maxLevel) {
-        return (int) playersService.count(new Specification<Player>() {
-            @Override
-            public Predicate toPredicate(Root<Player> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
-                if (name != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%" + name + "%")));
-                }
-                if (title != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("title"), "%" + title + "%")));
-                }
-                if (race != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("race"), race)));
-                }
-                if (profession != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("profession"), profession)));
-                }
-                if (after != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), new Date(after))));
-                }
-                if (before != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), new Date(before))));
-                }
-                if (banned != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("banned"), banned)));
-                }
-                if (minExperience != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), minExperience)));
-                }
-                if (maxExperience != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("experience"), maxExperience)));
-                }
-                if (minLevel != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("level"), minLevel)));
-                }
-                if (maxLevel != null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("level"), maxLevel)));
-                }
-
-
-                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        return (int) playersService.count((Specification<Player>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (name != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%" + name + "%")));
             }
+            if (title != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("title"), "%" + title + "%")));
+            }
+            if (race != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("race"), race)));
+            }
+            if (profession != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("profession"), profession)));
+            }
+            if (after != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), new Date(after))));
+            }
+            if (before != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), new Date(before))));
+            }
+            if (banned != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("banned"), banned)));
+            }
+            if (minExperience != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), minExperience)));
+            }
+            if (maxExperience != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("experience"), maxExperience)));
+            }
+            if (minLevel != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("level"), minLevel)));
+            }
+            if (maxLevel != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("level"), maxLevel)));
+            }
+
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }
 }
