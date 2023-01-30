@@ -85,8 +85,4 @@ public class AppConfig {
         return properties;
     }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
 }
